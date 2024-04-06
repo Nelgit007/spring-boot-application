@@ -11,11 +11,16 @@ pipeline {
     }
     stages {
 
-        stage('Checkout') {
+        // stage('Checkout') {
+        //     steps {
+        //         sh 'echo checked'
+        //         branch 'main'
+        //         url: 'https://github.com/Nelgit007/spring-boot-application.git'
+        //     }
+        // }
+        stage('Maven Build and Test') {
             steps {
-                sh 'echo checked'
-                branch 'main'
-                url: 'https://github.com/Nelgit007/spring-boot-application.git'
+                sh 'mvn clean package'
             }
         }
     }
