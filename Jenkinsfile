@@ -14,7 +14,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 sh 'echo checked'
-                git branch 'main',
+                git branch 'main'
                 url: 'https://github.com/Nelgit007/spring-boot-application.git'
             }
         }
