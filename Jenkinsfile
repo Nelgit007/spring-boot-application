@@ -19,21 +19,21 @@ pipeline {
         //         url: 'https://github.com/Nelgit007/spring-boot-application.git'
         //     }
         // }
-        stage('Maven Build and Test') {
-            steps {
-                sh 'cd spring-boot-app && mvn clean package'
-            }
-        }
-        // stage('Static code Analysis: Sonarqube') {
-        //     environment {
-        //         SONAR_URL = 'http://54.174.45.166:9000'
-        //     }
-
+        // stage('Maven Build and Test') {
         //     steps {
-        //         withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-        //             sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
-        //         }
+        //         sh 'cd spring-boot-app && mvn clean package'
         //     }
         // }
+        stage('Static code Analysis: Sonarqube') {
+            environment {
+                SONAR_URL = 'http://54.174.45.166:9000'
+            }
+
+            steps {
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                    sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                }
+            }
+        }
     }
 }
