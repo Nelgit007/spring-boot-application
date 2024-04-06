@@ -20,7 +20,7 @@ pipeline {
         // }
         stage('Maven Build and Test') {
             steps {
-                sh 'mvn clean package'
+                sh 'cd spring-boot-app && mvn clean package'
             }
         }
     }
