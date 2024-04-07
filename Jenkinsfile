@@ -19,17 +19,7 @@ pipeline {
         //         url: 'https://github.com/Nelgit007/spring-boot-application.git'
         //     }
         // }
-        stage('Unit Test') {
-            steps {
-                sh 'mvn test'
-            }
-        }
-        stage('Integration Test') {
-            steps {
-                sh 'mvn -DskipUnitTests'
-            }
-        }
-        stage('Maven Build and Test') {
+        stage('Maven Test and Build') {
             steps {
                 sh 'cd spring-boot-app && mvn clean package'
             }
