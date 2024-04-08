@@ -26,12 +26,27 @@ pipeline {
         }
         stage('Static code Analysis: Sonarqube') {
             environment {
-                SONAR_URL = "http://35.153.226.207:9000"
+                SONAR_URL = "http://35.153.226.207:9000/"
             }
 
             steps {
                 withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
                     sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                }
+            }
+        }
+        stage('Build and push docker image') {
+            environment {
+                DOCKER_IMAGE = "nelsonosagie/spring-boot-v1:${BUILD_NUMBER}"
+                REGISTRY_CREDENTIALS = credentials('docker-hub')
+            }
+            steps {
+                script {
+                    sh 'cd spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
+                    def dockerImage = docker.image("${DOCKER_IMAGE}")
+                    docker.withRegistry('https://index.docker.io/v1/', "docker-hub") {
+                        dockerImage.push()
+                    }
                 }
             }
         }
