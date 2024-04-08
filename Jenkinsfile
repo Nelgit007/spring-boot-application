@@ -37,7 +37,7 @@ pipeline {
         }
         stage('Docker image Build, image scan and push to docker hub') {
             environment {
-                DOCKER_IMAGE = "nelsonosagie/spring-boot-v1:${BUILD_NUMBER}"
+                DOCKER_IMAGE = "nelsonosagie/spring-boot-v2:${BUILD_NUMBER}"
                 REGISTRY_CREDENTIALS = credentials('docker-hub')
             }
             steps {
