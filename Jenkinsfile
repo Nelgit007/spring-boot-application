@@ -42,12 +42,11 @@ pipeline {
             }
             steps {
                 script {
-                    sh """
-                    cd spring-boot-app && docker build -t ${DOCKER_IMAGE} .
-                    sudo apt-get install wget apt-transport-https gnupg lsb-release
+                    sh """ sudo apt-get install wget apt-transport-https gnupg lsb-release
                     wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
                     echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
                     sudo apt-get install trivy -y
+                    cd spring-boot-app && docker build -t ${DOCKER_IMAGE} .
                     trivy image nelsonosagie/spring-boot-v1:${BUILD_NUMBER} > scan.txt
                     cat scan.txt
                     """
