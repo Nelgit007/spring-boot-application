@@ -1,5 +1,6 @@
 FROM adoptopenjdk/openjdk11:alpine-jre
 
+## artifact
 ARG artifact=spring-boot-app/target/spring-boot-web.jar
 
 WORKDIR /opt/app
