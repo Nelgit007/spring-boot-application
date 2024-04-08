@@ -35,14 +35,18 @@ pipeline {
                 }
             }
         }
-        stage('Build and push docker image') {
+        stage('Docker image Build, image scan and push to docker hub') {
             environment {
                 DOCKER_IMAGE = "nelsonosagie/spring-boot-v1:${BUILD_NUMBER}"
                 REGISTRY_CREDENTIALS = credentials('docker-hub')
             }
             steps {
                 script {
-                    sh 'cd spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
+                    sh """
+                    cd spring-boot-app && docker build -t ${DOCKER_IMAGE} .
+                    trivy image nelsonosagie/spring-boot-v1:${BUILD_NUMBER} > scan.txt
+                    cat scan.txt
+                    """
                     def dockerImage = docker.image("${DOCKER_IMAGE}")
                     docker.withRegistry('https://index.docker.io/v1/', "docker-hub") {
                         dockerImage.push()
@@ -50,5 +54,5 @@ pipeline {
                 }
             }
         }
-    }
+    }      
 }
