@@ -8,7 +8,7 @@ pipeline {
             args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
 
-    }
+    }   
     stages {
 
         // stage('Checkout') {
@@ -19,14 +19,22 @@ pipeline {
         //         url: 'https://github.com/Nelgit007/spring-boot-application.git'
         //     }
         // }
-        stage('Maven Test and Build') {
+        stage('1. clean up') {
+            // Clean up workspace dir for new build
+            steps {
+                deleteDir ()
+            }
+        }
+
+        stage('2. Maven Test and Build') {
             steps {
                 sh 'cd spring-boot-app && mvn clean package'
             }
         }
-        stage('Static code Analysis: Sonarqube') {
+
+        stage('3. Static code Analysis: Sonarqube') {
             environment {
-                SONAR_URL = "http://35.153.226.207:9000/"
+                SONAR_URL = "http://35.174.200.43:9000/"
             }
 
             steps {
@@ -35,9 +43,10 @@ pipeline {
                 }
             }
         }
-        stage('Docker image Build, image scan and push to docker hub') {
+        
+        stage('4. Docker image Build, image scan and push to docker hub') {
             environment {
-                DOCKER_IMAGE = "nelsonosagie/spring-boot-v2:${BUILD_NUMBER}"
+                DOCKER_IMAGE = "nelsonosagie/spring-boot-v2.1:${BUILD_NUMBER}"
                 REGISTRY_CREDENTIALS = credentials('docker-hub')
             }
             steps {
